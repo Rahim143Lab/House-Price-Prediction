@@ -1,0 +1,51 @@
+feature,importance
+Overall Qual,0.28535125
+Garage Cars,0.16563255
+has_fireplace,0.087838165
+total_bathrooms,0.059021495
+Central Air_N,0.05668237
+living_area_per_bedroom,0.043521322
+Neighborhood_OldTown,0.037506875
+Gr Liv Area,0.033209316
+property_age,0.022870442
+Neighborhood_Edwards,0.020555306
+Lot Area,0.01925053
+years_since_renovation,0.015741112
+floors,0.01216879
+Neighborhood_Crawfor,0.010374768
+Bldg Type_1Fam,0.010256954
+Overall Cond,0.010156389
+Neighborhood_StoneBr,0.008407336
+total_rooms,0.008003616
+garage_indicator,0.0076806527
+lot_area_per_living_area,0.0072225025
+Neighborhood_NoRidge,0.007099293
+Neighborhood_Veenker,0.0054025482
+Neighborhood_NAmes,0.0048067556
+Neighborhood_Gilbert,0.0045047095
+Neighborhood_CollgCr,0.0044276416
+Neighborhood_GrnHill,0.004396011
+Neighborhood_NridgHt,0.004174549
+Neighborhood_SWISU,0.004026515
+Neighborhood_Somerst,0.0037120103
+Neighborhood_Mitchel,0.0030380555
+Bldg Type_Duplex,0.0030023349
+Neighborhood_SawyerW,0.0028655601
+Central Air_Y,0.0028655385
+Neighborhood_Sawyer,0.0028166072
+Neighborhood_Timber,0.0027843239
+has_deck_or_porch,0.0027398895
+Neighborhood_BrkSide,0.0024872117
+Neighborhood_ClearCr,0.0023326052
+Neighborhood_Blmngtn,0.0022127444
+Neighborhood_NWAmes,0.0021419127
+Neighborhood_IDOTRR,0.0018433239
+Bldg Type_2fmCon,0.0018358515
+Bldg Type_TwnhsE,0.001419122
+Neighborhood_MeadowV,0.0010032394
+Neighborhood_NPkVill,0.00060978025
+Neighborhood_Blueste,0.0
+Neighborhood_BrDale,0.0
+Neighborhood_Greens,0.0
+Neighborhood_Landmrk,0.0
+Bldg Type_Twnhs,0.0

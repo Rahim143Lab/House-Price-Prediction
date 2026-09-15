@@ -1,0 +1,64 @@
+{
+  "model_name": "XGBoost (Tuned)",
+  "training_date": "2026-09-13T14:44:21.700893+00:00",
+  "random_state": 42,
+  "numeric_features": [
+    "Lot Area",
+    "Overall Qual",
+    "Overall Cond",
+    "Gr Liv Area",
+    "Garage Cars",
+    "property_age",
+    "years_since_renovation",
+    "total_bathrooms",
+    "total_rooms",
+    "living_area_per_bedroom",
+    "lot_area_per_living_area",
+    "garage_indicator",
+    "has_fireplace",
+    "has_deck_or_porch",
+    "floors"
+  ],
+  "categorical_features": [
+    "Neighborhood",
+    "Bldg Type",
+    "Central Air"
+  ],
+  "engineered_features": [
+    "property_age",
+    "years_since_renovation",
+    "total_bathrooms",
+    "total_rooms",
+    "living_area_per_bedroom",
+    "lot_area_per_living_area",
+    "garage_indicator",
+    "has_fireplace",
+    "has_deck_or_porch",
+    "floors"
+  ],
+  "target": "SalePrice",
+  "dataset": {
+    "name": "Ames Housing Dataset (De Cock, 2011)",
+    "n_rows_total": 2930,
+    "n_train": 2051,
+    "n_val": 439,
+    "n_test": 440
+  },
+  "metrics": {
+    "validation": {
+      "MAE": 15073.33,
+      "MSE": 505852384.0,
+      "RMSE": 22491.16,
+      "R2": 0.9261,
+      "MAPE": 8.81
+    },
+    "test": {
+      "MAE": 16385.11,
+      "MSE": 618111360.0,
+      "RMSE": 24861.85,
+      "R2": 0.9142,
+      "MAPE": 8.93
+    }
+  },
+  "version": "1.0.0"
+}

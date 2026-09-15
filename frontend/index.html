@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ledger &mdash; AI House Price Estimator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="rail" id="rail">
+  <div class="rail-brand">
+    <span class="rail-mark">§</span>
+    <span class="rail-name">Ledger</span>
+  </div>
+  <nav class="rail-nav">
+    <a href="#home" class="rail-link is-active" data-section="home">Home</a>
+    <a href="#predict" class="rail-link" data-section="predict">Prediction</a>
+    <a href="#model" class="rail-link" data-section="model">About Model</a>
+  </nav>
+  <div class="rail-foot">
+    <span class="dot" id="apiDot"></span>
+    <span id="apiStatusText">Checking API&hellip;</span>
+  </div>
+</div>
+
+<button class="rail-toggle" id="railToggle" aria-label="Toggle navigation">&#9776;</button>
+
+<main>
+
+  <!-- ============ HOME / HERO ============ -->
+  <section id="home" class="section hero">
+    <div class="hero-index">01 &mdash; Estimate</div>
+    <h1 class="hero-title">What is this<br>property worth?</h1>
+    <p class="hero-sub">
+      Ledger reads twelve property details &mdash; size, age, condition, garage,
+      neighborhood &mdash; and returns a data-driven estimate, trained on
+      nearly three thousand recorded Ames, Iowa home sales.
+    </p>
+    <a href="#predict" class="btn btn-primary" data-nav="predict">Estimate a property &rarr;</a>
+
+    <div class="hero-stats" id="heroStats">
+      <div class="stat">
+        <div class="stat-value" id="statR2">&mdash;</div>
+        <div class="stat-label">Test R&sup2;</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="statMae">&mdash;</div>
+        <div class="stat-label">Typical error (MAE)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value" id="statModel">&mdash;</div>
+        <div class="stat-label">Selected model</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">2,930</div>
+        <div class="stat-label">Homes in training data</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PREDICTION ============ -->
+  <section id="predict" class="section">
+    <div class="section-index">02 &mdash; Prediction</div>
+    <h2 class="section-title">Describe the property</h2>
+    <p class="section-lede">Fill in what you know. Every field below is a feature the model was actually trained on.</p>
+
+    <form id="predictForm" class="ledger-form" novalidate>
+
+      <fieldset class="form-block">
+        <legend>Property information</legend>
+        <div class="grid grid-3">
+          <label class="field">
+            <span>Bedrooms</span>
+            <input type="number" name="bedrooms" min="0" max="12" step="1" value="3" required />
+          </label>
+          <label class="field">
+            <span>Bathrooms <em>(half = .5)</em></span>
+            <input type="number" name="bathrooms" min="0" max="8" step="0.5" value="2" required />
+          </label>
+          <label class="field">
+            <span>Total rooms above grade</span>
+            <input type="number" name="total_rooms" min="1" max="20" step="1" value="6" required />
+          </label>
+          <label class="field">
+            <span>Living area (sq ft)</span>
+            <input type="number" name="living_area" min="200" max="15000" step="10" value="1500" required />
+          </label>
+          <label class="field">
+            <span>Lot area (sq ft)</span>
+            <input type="number" name="lot_area" min="500" max="250000" step="50" value="8000" required />
+          </label>
+          <label class="field">
+            <span>Floors</span>
+            <select name="floors" required>
+              <option value="1">1</option>
+              <option value="1.5">1.5</option>
+              <option value="2" selected>2</option>
+              <option value="2.5">2.5</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Garage capacity (cars)</span>
+            <input type="number" name="garage_cars" min="0" max="5" step="1" value="1" required />
+          </label>
+          <label class="field">
+            <span>Fireplaces</span>
+            <input type="number" name="fireplaces" min="0" max="5" step="1" value="0" />
+          </label>
+          <label class="field field-check">
+            <input type="checkbox" name="has_deck_or_porch" />
+            <span>Has a deck or porch</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="form-block">
+        <legend>Age</legend>
+        <div class="grid grid-2">
+          <label class="field">
+            <span>Year built</span>
+            <input type="number" name="year_built" min="1870" max="2026" step="1" value="1998" required />
+          </label>
+          <label class="field">
+            <span>Year remodeled <em>(optional)</em></span>
+            <input type="number" name="year_remodeled" min="1870" max="2026" step="1" placeholder="same as year built" />
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="form-block">
+        <legend>Location &amp; type</legend>
+        <div class="grid grid-2">
+          <label class="field">
+            <span>Neighborhood</span>
+            <select name="neighborhood" id="neighborhoodSelect" required></select>
+          </label>
+          <label class="field">
+            <span>Building type</span>
+            <select name="bldg_type" required>
+              <option value="1Fam">Single-family detached</option>
+              <option value="TwnhsE">Townhouse, end unit</option>
+              <option value="Twnhs">Townhouse, inside unit</option>
+              <option value="Duplex">Duplex</option>
+              <option value="2fmCon">Two-family conversion</option>
+            </select>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="form-block">
+        <legend>Condition</legend>
+        <div class="grid grid-2">
+          <label class="field">
+            <span>Overall quality <em>(1 = poor, 10 = excellent)</em></span>
+            <input type="range" name="overall_qual" min="1" max="10" step="1" value="6" oninput="this.nextElementSibling.textContent=this.value" />
+            <output>6</output>
+          </label>
+          <label class="field">
+            <span>Overall condition <em>(1 = poor, 10 = excellent)</em></span>
+            <input type="range" name="overall_cond" min="1" max="10" step="1" value="5" oninput="this.nextElementSibling.textContent=this.value" />
+            <output>5</output>
+          </label>
+          <label class="field field-check">
+            <input type="checkbox" name="central_air" checked />
+            <span>Has central air conditioning</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" id="submitBtn">Predict house price</button>
+        <span class="form-error" id="formError" role="alert"></span>
+      </div>
+    </form>
+
+    <div class="result-card" id="resultCard" hidden aria-live="polite">
+      <div class="result-loading" id="resultLoading" hidden>
+        <div class="spinner" aria-hidden="true"></div>
+        <span>Running the model&hellip;</span>
+      </div>
+      <div class="result-body" id="resultBody" hidden>
+        <div class="result-eyebrow">Estimated property value</div>
+        <div class="result-price" id="resultPrice">$0</div>
+        <div class="result-range" id="resultRange"></div>
+        <div class="result-meta">
+          <div><span>Model</span><strong id="resultModel">&mdash;</strong></div>
+          <div><span>Living area</span><strong id="resultLiving">&mdash;</strong></div>
+          <div><span>Neighborhood</span><strong id="resultNeighborhood">&mdash;</strong></div>
+          <div><span>Quality</span><strong id="resultQuality">&mdash;</strong></div>
+        </div>
+        <p class="result-disclaimer" id="resultDisclaimer"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT MODEL ============ -->
+  <section id="model" class="section">
+    <div class="section-index">03 &mdash; About the model</div>
+    <h2 class="section-title">How the estimate is produced</h2>
+
+    <ol class="steps">
+      <li><strong>You describe the property</strong> using the form above &mdash; size, age, condition, location and a few other details.</li>
+      <li><strong>The inputs are validated</strong> against sensible real-world ranges before anything is sent to the model.</li>
+      <li><strong>Features are engineered</strong>: property age, years since renovation, total bathrooms, room ratios and more are computed from your raw answers.</li>
+      <li><strong>A trained regression model</strong> receives the processed features and estimates a sale price based on patterns learned from historical sales.</li>
+      <li><strong>The result is returned</strong> along with the model used and an approximate error band, so you know how much to trust it.</li>
+    </ol>
+
+    <p class="prose">
+      Regression, in plain terms, means teaching a model to draw the
+      relationship between a set of inputs (like square footage or number
+      of bathrooms) and a continuous number (the sale price) &mdash; rather
+      than a category. The model in this project was trained on the
+      <strong>Ames Housing dataset</strong> (De Cock, 2011), a widely used
+      collection of 2,930 real residential sales in Ames, Iowa, with
+      dozens of recorded property characteristics.
+    </p>
+
+    <div class="model-metrics" id="modelMetricsPanel">
+      <h3>Performance on held-out test data</h3>
+      <div class="grid grid-3 metric-grid" id="metricGrid">
+        <div class="metric"><span id="mMae">&mdash;</span><label>Mean Absolute Error</label></div>
+        <div class="metric"><span id="mRmse">&mdash;</span><label>Root Mean Squared Error</label></div>
+        <div class="metric"><span id="mR2">&mdash;</span><label>R&sup2; (variance explained)</label></div>
+      </div>
+      <p class="prose small">
+        These figures come directly from the model's evaluation run and are
+        never hard-coded &mdash; if you retrain the model, this page will
+        reflect the new numbers automatically via the <code>/model-info</code> endpoint.
+      </p>
+    </div>
+
+    <div class="importance-block">
+      <h3>What drives the estimate most</h3>
+      <p class="prose small">Relative influence of each feature on the model's predictions, most important first.</p>
+      <div id="importanceList" class="importance-list"></div>
+    </div>
+
+    <p class="prose disclaimer-block">
+      <strong>A note on limits:</strong> this system produces an educational,
+      portfolio-grade estimate. It cannot see a property in person, does not
+      know about school ratings, recent comparable sales, or current market
+      conditions, and should never be treated as an appraisal or a
+      guaranteed market price.
+    </p>
+  </section>
+
+  <footer class="site-footer">
+    <span>Ledger &middot; AI House Price Estimator &middot; built for portfolio demonstration</span>
+    <a href="/docs" target="_blank" rel="noopener">API docs</a>
+  </footer>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

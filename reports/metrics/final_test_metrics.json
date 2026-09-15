@@ -1,0 +1,17 @@
+{
+  "model": "XGBoost (Tuned)",
+  "validation_metrics": {
+    "MAE": 15073.33,
+    "MSE": 505852384.0,
+    "RMSE": 22491.16,
+    "R2": 0.9261,
+    "MAPE": 8.81
+  },
+  "test_metrics": {
+    "MAE": 16385.11,
+    "MSE": 618111360.0,
+    "RMSE": 24861.85,
+    "R2": 0.9142,
+    "MAPE": 8.93
+  }
+}
